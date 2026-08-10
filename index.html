@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mastermind Killer — Primera Edición</title>
+<meta name="description" content="Sabes entrenar. Nadie te enseñó a vivir de esto. Taller presencial y gratuito en Arica para entrenadores, coaches y personal trainers. Primera edición. 10 cupos.">
+<meta name="theme-color" content="#0A0A0A">
+
+<!-- Open Graph: el link se comparte por WhatsApp / Instagram DM -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mastermind Killer — Primera Edición">
+<meta property="og:description" content="Sabes entrenar. Nadie te enseñó a vivir de esto. Arica, última semana de agosto. Taller de 5 horas, gratis, 10 cupos.">
+<meta property="og:locale" content="es_CL">
+<!-- TODO: reemplazar por la URL final y una imagen 1200x630 en la misma estética -->
+<meta property="og:image" content="assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<!-- Las animaciones de entrada solo existen si hay JS. Sin esto, un fallo
+     de script dejaría la página entera invisible (opacity:0). -->
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip-link" href="#postular">Ir al formulario</a>
+
+<!-- ============================================================ 1. HERO -->
+<header class="hero">
+  <div class="wrap hero__inner">
+    <p class="eyebrow reveal">Arica · Última semana de agosto · 100% gratuito</p>
+
+    <h1 class="hero__title reveal" data-delay="1">
+      Mastermind Killer<span class="hero__title-sub">Primera Edición</span>
+    </h1>
+
+    <p class="hero__claim reveal" data-delay="2">
+      Sabes entrenar. Nadie te enseñó a vivir de esto.
+    </p>
+
+    <p class="hero__sub reveal" data-delay="3">
+      Exclusivo para entrenadores, coaches, personal trainers y profesionales de la
+      salud y el deporte que quieren escalar su carrera — sobre todo en el mundo
+      online. Un día para aprender lo que a nosotros nadie nos enseñó.
+    </p>
+
+    <div class="hero__actions reveal" data-delay="4">
+      <a class="btn btn--primary" href="#postular" data-cta="hero">Postular ahora</a>
+      <span class="hero__note">Postular no garantiza el cupo. Hay selección.</span>
+    </div>
+
+    <!-- Marcador de cupos y postulaciones -->
+    <div class="marcador marcador--hero reveal" data-delay="4">
+      <span class="marcador__par">
+        <b class="marcador__num" data-cupos>10</b>
+        <span class="marcador__lbl">cupos</span>
+      </span>
+      <span class="marcador__par" data-postulantes-wrap hidden>
+        <b class="marcador__num" data-postulantes>0</b>
+        <span class="marcador__lbl" data-postulantes-lbl>postulantes</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="hero__scroll" aria-hidden="true"><span></span></div>
+</header>
+
+<main>
+
+<!-- ==================================================== 2. LA HISTORIA -->
+<!-- id="quien-ensena", no "historia": ese id lo usa el campo del formulario
+     y dos elementos con el mismo id rompen el <label for>. -->
+<section class="section section--premisa" id="quien-ensena">
+  <div class="wrap">
+    <p class="section__label reveal">Quién te va a enseñar</p>
+
+    <div class="premisa-grid">
+    <div class="premisa">
+      <p class="premisa__p premisa__p--strong reveal">
+        A mí nadie me enseñó esto. Lo aprendí a golpes, perdiendo plata y tiempo.
+        En este rubro te enseñan a entrenar, pero no te enseñan a vivir de entrenar.
+      </p>
+      <p class="premisa__p reveal">
+        Llevo 10 años en fitness y los últimos 5 los pasé construyendo mi negocio
+        online: probando, quebrando cosas y armando un método que hoy funciona todos
+        los meses. Pasé de facturar 200 mil pesos al mes a estar llegando a 8
+        millones, y voy por los 10. No cambié de profesión. Cambié de sistema.
+      </p>
+      <p class="premisa__p reveal">
+        Hoy tengo alrededor de 400 alumnos entrenando conmigo. Y para llegar acá no
+        me quedé esperando en Chile: viajé a Argentina, a Colombia y a Perú a
+        formarme con gente que ya había construido lo que yo quería construir.
+        Todo lo que aprendí afuera lo vengo a dejar acá.
+      </p>
+      <p class="premisa__p reveal">
+        Lo que más me marcó fue la última competencia: vi a hartos cracks — gente
+        que domina su oficio, pero cada uno remando solo. Ese es el problema que
+        quiero romper: en Chile sobra talento y falta sistema.
+      </p>
+      <p class="premisa__p premisa__p--strong reveal">
+        No vengo a motivarte. Vengo a enseñarte lo que a los entrenadores nadie
+        les enseña.
+      </p>
+      <p class="premisa__firma reveal">
+        Camilo — Método Killer ·
+        <a href="https://instagram.com/camilo_hellfit" target="_blank" rel="noopener">@camilo_hellfit</a>
+      </p>
+    </div>
+
+      <div class="premisa__fotos">
+        <figure class="foto reveal">
+          <!-- Sin loading="lazy" a propósito: son 2 fotos de ~140 KB y en
+               algunos navegadores el lazy no dispara y quedan en blanco. -->
+          <img src="assets/img/camilo-retrato.jpg" alt="Camilo, fundador de Método Killer"
+               width="1000" height="1250" decoding="async">
+        </figure>
+        <figure class="foto foto--sec reveal">
+          <img src="assets/img/camilo-evento.jpg" alt="Camilo en una conferencia de negocios en Buenos Aires"
+               width="900" height="1125" decoding="async">
+          <figcaption>Buenos Aires. Aprendiendo de los que ya lo hicieron.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ 3. QUÉ SE LLEVA QUIEN ENTRA -->
+<section class="section section--pilares" id="que-te-llevas">
+  <div class="wrap">
+    <p class="section__label reveal">Qué te llevas</p>
+    <h2 class="section__title reveal">Cuatro pilares. Cero relleno.</h2>
+
+    <ol class="pilares">
+      <li class="pilar reveal">
+        <span class="pilar__num">01</span>
+        <h3 class="pilar__name">Avatar</h3>
+        <p class="pilar__desc">
+          Sales sabiendo exactamente a quién le vendes y por qué te compra.
+          Se acaba el "entreno a todos".
+        </p>
+      </li>
+      <li class="pilar reveal">
+        <span class="pilar__num">02</span>
+        <h3 class="pilar__name">Marketing</h3>
+        <p class="pilar__desc">
+          Un mensaje y una oferta que se venden solos. Dejas de perseguir clientes
+          y empiezas a atraerlos.
+        </p>
+      </li>
+      <li class="pilar reveal">
+        <span class="pilar__num">03</span>
+        <h3 class="pilar__name">Ventas</h3>
+        <p class="pilar__desc">
+          Cierras sin sentir que estás rogando. Estructura de conversación,
+          precio y manejo de objeciones.
+        </p>
+      </li>
+      <li class="pilar reveal">
+        <span class="pilar__num">04</span>
+        <h3 class="pilar__name">Entrega</h3>
+        <p class="pilar__desc">
+          Servicio de calidad sin regalar tu tiempo completo. Sistema de entrega
+          que escala contigo, no contra ti.
+        </p>
+      </li>
+    </ol>
+
+    <p class="pilares__cierre reveal">Menos motivación. Más ejecución.</p>
+  </div>
+</section>
+
+<!-- ======================================================= 3b. EL DÍA -->
+<section class="section section--dia" id="el-dia">
+  <div class="wrap">
+    <p class="section__label reveal">El día</p>
+    <h2 class="section__title reveal">Cinco horas. Diez personas. Un mapa.</h2>
+
+    <dl class="datos">
+      <div class="dato reveal">
+        <dt>Dónde</dt>
+        <dd>Arica, Chile</dd>
+      </div>
+      <div class="dato reveal">
+        <dt>Cuándo</dt>
+        <dd>Última semana de agosto
+          <span>El día exacto se confirma a los seleccionados.</span>
+        </dd>
+      </div>
+      <div class="dato reveal">
+        <dt>Formato</dt>
+        <dd>Taller de 5 horas
+          <span>Mesa redonda: partimos por tus casos y tus problemas reales,
+            después entro yo con el sistema.</span>
+        </dd>
+      </div>
+      <div class="dato reveal">
+        <dt>Valor</dt>
+        <dd>Gratis
+          <span>Sin pitch y sin venta al final.</span>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="dia__cierre reveal">
+      Te vas con tu mapa: el paso a paso para empezar a construir tu negocio
+      online. Al día siguiente ya lo puedes aplicar.
+    </p>
+  </div>
+</section>
+
+<!-- ======================================================== 3c. PRUEBA -->
+<section class="section section--prueba" id="prueba">
+  <div class="wrap">
+    <p class="section__label reveal">Cuando se aplica</p>
+
+    <blockquote class="testimonio reveal">
+      <p>
+        Ofrecí mi plan de 225 mil el trimestre como plan pro, y el VIP en 300.
+        La única diferencia era una videollamada semanal en vez de una mensual.
+        Y vendí el plan VIP. De 300.
+      </p>
+      <cite>Álvaro — coach</cite>
+    </blockquote>
+
+    <p class="testimonio__nota reveal">
+      Eso es el pilar de oferta y precio funcionando. No cambió de clientes ni
+      trabajó más horas: cambió cómo estaba armado lo que vendía.
+    </p>
+  </div>
+</section>
+
+
+<!-- ================================== 4. POR QUÉ ES GRATIS / POR QUÉ SOLO 10 -->
+<section class="section section--razon" id="por-que">
+  <div class="wrap">
+    <p class="section__label reveal">Sin letra chica</p>
+
+    <div class="razon">
+      <div class="razon__col reveal">
+        <h3 class="razon__h">Por qué es gratis</h3>
+        <p>
+          Es la primera edición. No hay pitch, no hay venta, no hay upsell al final.
+          No te voy a vender nada.
+        </p>
+        <p>
+          Lo hago porque quiero llevar el fitness chileno al siguiente nivel, y eso
+          no pasa con entrenadores compitiendo entre ellos por el mismo cliente.
+          Pasa cuando el gremio se profesionaliza.
+        </p>
+        <p>
+          Quiero entregar lo que sé y que ese día sea un antes y un después en tu
+          carrera. De eso me encargo yo.
+        </p>
+        <p>
+          Y no es una charla: es un espacio donde todos comparten. Tus anécdotas,
+          tus problemas reales, lo que estás viviendo hoy con tu negocio. Yo me
+          comprometo a enseñarte toda la parte digital: lo mismo que usé para pasar
+          de 200 mil a 8 millones al mes, sin dejar de ser entrenador.
+        </p>
+        <p class="razon__nota">
+          Vamos a grabar y fotografiar la sesión para documentar la primera edición.
+          Si entras, entras sabiendo eso.
+        </p>
+      </div>
+
+      <div class="razon__col reveal">
+        <h3 class="razon__h">Por qué solo 10</h3>
+        <p>
+          Porque cuando las cosas son gratis, la gente no se compromete.
+        </p>
+        <p>
+          Busco gente comprometida: que llegue, que participe y que no falte.
+          El espacio es limitado y cada cupo desperdiciado es alguien que sí
+          quería estar.
+        </p>
+        <p>
+          Con 10 personas puedo mirar el negocio de cada uno, no dar una charla
+          genérica. Por eso postular no garantiza el cupo: van a postular muchos
+          más y yo elijo uno por uno.
+        </p>
+        <p class="razon__nota">
+          Arica, última semana de agosto. El día exacto se confirma a los
+          seleccionados.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== 5. MARCADOR EN VIVO -->
+<section class="section section--cupos" id="cupos">
+  <div class="wrap counter-block">
+    <p class="section__label reveal">Disponibilidad</p>
+
+    <div class="marcador marcador--big reveal">
+      <span class="marcador__par">
+        <b class="marcador__num" data-cupos>10</b>
+        <span class="marcador__lbl">cupos</span>
+      </span>
+      <span class="marcador__vs" aria-hidden="true"></span>
+      <span class="marcador__par" data-postulantes-wrap hidden>
+        <b class="marcador__num" data-postulantes>0</b>
+        <span class="marcador__lbl" data-postulantes-lbl>postulantes</span>
+      </span>
+    </div>
+
+    <p class="counter__caption reveal" data-marcador-frase>
+      Las postulaciones ya están abiertas.
+    </p>
+
+    <p class="counter__meta reveal">
+      Arica · Última semana de agosto · El día exacto se confirma a los seleccionados.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================ 6. FORMULARIO DE POSTULACIÓN -->
+<section class="section section--form" id="postular">
+  <div class="wrap wrap--narrow">
+    <p class="section__label reveal">Postulación</p>
+    <h2 class="section__title reveal">Nueve preguntas. Respóndelas en serio.</h2>
+    <p class="form__intro reveal">
+      Toma menos de tres minutos. Las respuestas de una línea no pasan el filtro.
+    </p>
+
+    <form class="form" id="form-postulacion" novalidate>
+      <!-- Honeypot anti-bot: oculto para humanos -->
+      <div class="hp" aria-hidden="true">
+        <label for="empresa">Empresa</label>
+        <input type="text" id="empresa" name="empresa" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- Progreso -->
+      <div class="steps" aria-hidden="true">
+        <span class="steps__track"><span class="steps__fill" data-steps-fill></span></span>
+        <span class="steps__count">Paso <b data-step-now>1</b> de <b data-step-total>4</b></span>
+      </div>
+
+      <!-- ---------------------------------------------------- Paso 1 -->
+      <fieldset class="step is-active" data-step="1">
+        <legend class="step__legend">Quién eres</legend>
+
+        <div class="field">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" autocomplete="name" required
+                 placeholder="Tu nombre y apellido">
+          <p class="field__error" data-error-for="nombre"></p>
+        </div>
+
+        <div class="field">
+          <label for="instagram">Instagram / redes</label>
+          <input type="text" id="instagram" name="instagram" required
+                 placeholder="@tuusuario">
+          <p class="field__hint">Lo uso para saber quién eres. Si tu cuenta es privada, avísame por DM.</p>
+          <p class="field__error" data-error-for="instagram"></p>
+        </div>
+
+        <div class="field">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel" required
+                 placeholder="+56 9 ...">
+          <p class="field__hint">Ahí confirmo a los seleccionados.</p>
+          <p class="field__error" data-error-for="whatsapp"></p>
+        </div>
+
+        <div class="step__nav">
+          <button type="button" class="btn btn--primary" data-next>Continuar</button>
+        </div>
+      </fieldset>
+
+      <!-- ---------------------------------------------------- Paso 2 -->
+      <fieldset class="step" data-step="2">
+        <legend class="step__legend">Tu negocio hoy</legend>
+
+        <div class="field">
+          <label for="ocupacion">¿A qué te dedicas hoy?</label>
+          <div class="select-wrap">
+            <select id="ocupacion" name="ocupacion" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option>Entrenador presencial</option>
+              <option>Personal trainer</option>
+              <option>Online coach</option>
+              <option>Preparador físico</option>
+              <option>Profesional de la salud (kine, nutri, etc.)</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <p class="field__error" data-error-for="ocupacion"></p>
+        </div>
+
+        <div class="field">
+          <span class="field__label">¿Cuánto factura tu negocio hoy al mes?</span>
+          <div class="radios" role="radiogroup" aria-label="Facturación mensual">
+            <label class="radio"><input type="radio" name="facturacion" value="Menos de $500.000" required><span>Menos de $500.000</span></label>
+            <label class="radio"><input type="radio" name="facturacion" value="$500.000 – $1.000.000"><span>$500.000 – $1.000.000</span></label>
+            <label class="radio"><input type="radio" name="facturacion" value="$1.000.000 – $2.500.000"><span>$1.000.000 – $2.500.000</span></label>
+            <label class="radio"><input type="radio" name="facturacion" value="$2.500.000 – $5.000.000"><span>$2.500.000 – $5.000.000</span></label>
+            <label class="radio"><input type="radio" name="facturacion" value="Más de $5.000.000"><span>Más de $5.000.000</span></label>
+            <label class="radio"><input type="radio" name="facturacion" value="Aún no facturo"><span>Aún no facturo</span></label>
+          </div>
+          <p class="field__error" data-error-for="facturacion"></p>
+        </div>
+
+        <div class="field">
+          <label for="dificultad">¿Qué es lo que más te cuesta hoy para crecer tu negocio?</label>
+          <textarea id="dificultad" name="dificultad" rows="4" required
+                    placeholder="Sé concreto. Conseguir clientes, cobrar más, ordenar la entrega, etc."></textarea>
+          <p class="field__error" data-error-for="dificultad"></p>
+        </div>
+
+        <div class="step__nav">
+          <button type="button" class="btn btn--ghost" data-prev>Volver</button>
+          <button type="button" class="btn btn--primary" data-next>Continuar</button>
+        </div>
+      </fieldset>
+
+      <!-- ---------------------------------------------------- Paso 3 -->
+      <fieldset class="step" data-step="3">
+        <legend class="step__legend">Tu historia</legend>
+
+        <div class="field">
+          <label for="historia">Cuéntame tu historia: por qué el fitness, dónde estás hoy y qué buscas</label>
+          <textarea id="historia" name="historia" rows="7" required minlength="150"
+                    placeholder="Cómo llegaste al fitness, qué haces hoy y cuáles son tus objetivos. Sé claro, concreto y detallado."></textarea>
+          <p class="field__hint">
+            <span data-count-for="historia">0</span> caracteres — mínimo 150.
+          </p>
+          <p class="field__error" data-error-for="historia"></p>
+        </div>
+
+        <div class="step__nav">
+          <button type="button" class="btn btn--ghost" data-prev>Volver</button>
+          <button type="button" class="btn btn--primary" data-next>Continuar</button>
+        </div>
+      </fieldset>
+
+      <!-- ---------------------------------------------------- Paso 4 -->
+      <fieldset class="step" data-step="4">
+        <legend class="step__legend">Tu compromiso</legend>
+
+        <div class="field">
+          <label for="brecha">¿Qué crees que no sabes o te falta para dar el siguiente paso?</label>
+          <textarea id="brecha" name="brecha" rows="4" required
+                    placeholder="Lo que sabes que no manejas."></textarea>
+          <p class="field__error" data-error-for="brecha"></p>
+        </div>
+
+        <div class="field">
+          <label for="motivo">¿Por qué quieres ser parte de esta primera edición?</label>
+          <textarea id="motivo" name="motivo" rows="5" required minlength="120"
+                    placeholder="Esta es la que más pesa en la selección."></textarea>
+          <p class="field__hint">
+            <span data-count-for="motivo">0</span> caracteres — mínimo 120.
+          </p>
+          <p class="field__error" data-error-for="motivo"></p>
+        </div>
+
+        <div class="step__nav step__nav--submit">
+          <button type="button" class="btn btn--ghost" data-prev>Volver</button>
+          <button type="submit" class="btn btn--primary" data-submit>Enviar postulación</button>
+        </div>
+
+        <p class="form__legal">
+          Al enviar, aceptas que Método Killer te contacte por WhatsApp o Instagram
+          respecto a esta postulación.
+        </p>
+      </fieldset>
+
+      <!-- Estado de envío -->
+      <p class="form__status" data-form-status role="status" aria-live="polite"></p>
+    </form>
+
+    <!-- Pantalla de éxito -->
+    <div class="done" id="done" hidden>
+      <p class="section__label">Postulación recibida</p>
+      <h2 class="done__title">Ahora me toca a mí.</h2>
+      <p class="done__text">
+        Voy a revisar cada postulación una por una. Si quedas dentro de los 10,
+        te escribo por WhatsApp con el día exacto y el lugar en Arica.
+      </p>
+      <p class="done__text done__text--muted">
+        No respondas al aire: si tienes algo que agregar, mándamelo por DM.
+      </p>
+      <p class="done__slogan">Kill the old coach.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================== 7. CTA FINAL / CIERRE -->
+<section class="section section--cierre" id="cierre">
+  <div class="wrap cierre">
+    <h2 class="cierre__title reveal">
+      Deja de contar repeticiones.<br>
+      Empieza a construir un negocio real con lo que ya sabes.
+    </h2>
+
+    <div class="marcador marcador--inline reveal">
+      <span class="marcador__par">
+        <b class="marcador__num" data-cupos>10</b>
+        <span class="marcador__lbl">cupos</span>
+      </span>
+      <span class="marcador__par" data-postulantes-wrap hidden>
+        <b class="marcador__num" data-postulantes>0</b>
+        <span class="marcador__lbl" data-postulantes-lbl>postulantes</span>
+      </span>
+    </div>
+
+    <a class="btn btn--primary btn--lg reveal" href="#postular" data-cta="cierre">Postular ahora</a>
+
+    <p class="cierre__note reveal">
+      Primera edición. Arica, última semana de agosto. Taller de 5 horas, gratis.
+      El día exacto se confirma a los seleccionados.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span class="footer__brand">Método Killer</span>
+    <a class="footer__ig" href="https://instagram.com/camilo_hellfit"
+       target="_blank" rel="noopener">@camilo_hellfit</a>
+    <span class="footer__slogan">De entrenador a operador.</span>
+  </div>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
