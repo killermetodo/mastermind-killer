@@ -829,10 +829,9 @@ p:last-child{ margin-bottom:0; }
   .datos{ grid-template-columns:repeat(2,1fr); }
   .dato{ padding:clamp(2rem,4vw,2.5rem); }
   .razon{ grid-template-columns:repeat(2,1fr); }
-  /* Texto y fotos lado a lado; la columna de fotos no domina. */
+  /* Texto y foto lado a lado; la columna de la foto no domina. */
   .premisa-grid{ grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); align-items:start; }
   .premisa__fotos{ grid-template-columns:1fr; }
-  .foto--sec{ width:72%; }
   .counter--hero{ gap:.75rem; }
 }
 

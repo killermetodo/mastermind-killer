@@ -115,12 +115,12 @@
     corto:    "Necesito más detalle que eso.",
     tel:      "Deja un número de contacto válido.",
     ig:       "Deja tu usuario o el link de tu perfil.",
-    motivo:   "Escribe al menos 120 caracteres. Esta respuesta define la selección.",
-    historia: "Escribe al menos 150 caracteres. Quiero saber de verdad quién eres."
+    motivo:   "Escribe al menos 60 caracteres. Esta respuesta define la selección.",
+    historia: "Escribe al menos 80 caracteres. Quiero saber de verdad quién eres."
   };
 
   // Respuestas largas: mínimo de caracteres por campo.
-  var MINIMOS = { historia: 150, motivo: 120 };
+  var MINIMOS = { historia: 80, motivo: 60 };
 
   function campoDe(input) {
     return input.closest(".field");

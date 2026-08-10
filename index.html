@@ -119,14 +119,10 @@
 
       <div class="premisa__fotos">
         <figure class="foto reveal">
-          <!-- Sin loading="lazy" a propósito: son 2 fotos de ~140 KB y en
-               algunos navegadores el lazy no dispara y quedan en blanco. -->
+          <!-- Una sola foto, a propósito. Sin loading="lazy": son ~140 KB y en
+               algunos navegadores el lazy no dispara y queda en blanco. -->
           <img src="assets/img/camilo-retrato.jpg" alt="Camilo, fundador de Método Killer"
                width="1000" height="1250" decoding="async">
-        </figure>
-        <figure class="foto foto--sec reveal">
-          <img src="assets/img/camilo-evento.jpg" alt="Camilo en una conferencia de negocios en Buenos Aires"
-               width="900" height="1125" decoding="async">
           <figcaption>Buenos Aires. Aprendiendo de los que ya lo hicieron.</figcaption>
         </figure>
       </div>
@@ -430,10 +426,10 @@
 
         <div class="field">
           <label for="historia">Cuéntame tu historia: por qué el fitness, dónde estás hoy y qué buscas</label>
-          <textarea id="historia" name="historia" rows="7" required minlength="150"
-                    placeholder="Cómo llegaste al fitness, qué haces hoy y cuáles son tus objetivos. Sé claro, concreto y detallado."></textarea>
+          <textarea id="historia" name="historia" rows="5" required minlength="80"
+                    placeholder="Cómo llegaste al fitness, qué haces hoy y cuáles son tus objetivos."></textarea>
           <p class="field__hint">
-            <span data-count-for="historia">0</span> caracteres — mínimo 150.
+            <span data-count-for="historia">0</span> caracteres — mínimo 80.
           </p>
           <p class="field__error" data-error-for="historia"></p>
         </div>
@@ -457,10 +453,10 @@
 
         <div class="field">
           <label for="motivo">¿Por qué quieres ser parte de esta primera edición?</label>
-          <textarea id="motivo" name="motivo" rows="5" required minlength="120"
+          <textarea id="motivo" name="motivo" rows="4" required minlength="60"
                     placeholder="Esta es la que más pesa en la selección."></textarea>
           <p class="field__hint">
-            <span data-count-for="motivo">0</span> caracteres — mínimo 120.
+            <span data-count-for="motivo">0</span> caracteres — mínimo 60.
           </p>
           <p class="field__error" data-error-for="motivo"></p>
         </div>

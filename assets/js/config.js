@@ -16,9 +16,11 @@ window.KILLER_CONFIG = {
   // Se ignora si `contadorEnVivo` es true y el backend responde.
   postulantes: 0,
 
-  // Bajo este número, el bloque de postulantes no se muestra:
-  // "3 postulantes para 10 cupos" juega en contra. Aparece al llegar aquí.
-  minimoParaMostrar: 5,
+  // Bajo este número, el bloque de postulantes no se muestra.
+  // En 3: el marcador aparece pronto, que es lo que se pidió. Ponerlo en 1
+  // mostraría "1 postulante para 10 cupos" al primero que entre, y eso resta
+  // en vez de sumar. Subirlo a 5 o 10 hace que aparezca ya con fuerza.
+  minimoParaMostrar: 3,
 
   // true  → las postulaciones se cuentan solas desde el backend, en vivo.
   // false → usa `postulantes` de arriba.
