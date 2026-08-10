@@ -15,7 +15,7 @@
     contadorEnVivo: false,
     endpoint: "",
     token: "",
-    whatsappContacto: ""
+    instagramContacto: ""
   }, window.KILLER_CONFIG || {});
 
   var STORAGE_KEY = "killer_mastermind_postulacion";
@@ -230,11 +230,25 @@
     }
   }
 
-  function estado(mensaje, esError) {
+  /**
+   * `enlace` es opcional: {texto, href}. Se agrega como <a> de verdad para que
+   * en el celular se pueda tocar, en vez de dejar una URL pegada en el texto.
+   */
+  function estado(mensaje, esError, enlace) {
     var box = $("[data-form-status]");
     if (!box) return;
     box.textContent = mensaje || "";
     box.classList.toggle("is-error", !!esError);
+
+    if (enlace && enlace.href) {
+      box.appendChild(document.createTextNode(" "));
+      var a = document.createElement("a");
+      a.href = enlace.href;
+      a.textContent = enlace.texto;
+      a.target = "_blank";
+      a.rel = "noopener";
+      box.appendChild(a);
+    }
   }
 
   function recolectar() {
@@ -304,8 +318,20 @@
       redirect: "follow"
     }, 15000).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.text().then(function (t) {
-        try { return JSON.parse(t); } catch (e) { return { ok: true }; }
+      return r.text();
+    }).then(function (texto) {
+      var json = null;
+      try { json = JSON.parse(texto); } catch (e) { /* no era JSON */ }
+
+      // Respuesta legible del backend: vale tal cual.
+      if (json) return json;
+
+      // No es JSON: Apps Script devuelve HTML cuando el despliegue no existe,
+      // se pasó la cuota o el script reventó. Antes se asumía éxito aquí, y eso
+      // mostraba "postulación recibida" sin haber guardado nada. Preguntamos.
+      return verificar(data.id).then(function (existe) {
+        if (existe) return { ok: true, verificado: true };
+        throw new Error("El servidor respondió algo que no entiendo");
       });
     }).catch(function (err) {
       // El rechazo no distingue "no llegó" de "llegó pero CORS bloqueó leer la
@@ -369,10 +395,15 @@
       })
       .catch(function (err) {
         console.error("[Killer] Error al enviar:", err);
-        var extra = CFG.whatsappContacto
-          ? " O escríbeme directo: https://wa.me/" + CFG.whatsappContacto
-          : "";
-        estado("No pude enviar la postulación. Revisa tu conexión e inténtalo otra vez." + extra, true);
+        // Rescate: si el envío falla, la persona no se queda sin salida.
+        // Va a Instagram, que es de donde viene y donde ya te tiene ubicado.
+        var ig = CFG.instagramContacto;
+        estado(
+          "No pude enviar la postulación. Revisa tu conexión e inténtalo otra vez." +
+          (ig ? " Si sigue fallando, escríbeme por Instagram:" : ""),
+          true,
+          ig ? { texto: "@" + ig, href: "https://instagram.com/" + ig } : null
+        );
       })
       .then(function () {
         enviando = false;

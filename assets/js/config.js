@@ -44,7 +44,8 @@ window.KILLER_CONFIG = {
      3. TEXTOS VARIABLES
      --------------------------------------------------------------- */
 
-  // WhatsApp de contacto para el mensaje de error (sin +, solo dígitos).
-  // Vacío = no se muestra el enlace de respaldo.
-  whatsappContacto: ""
+  // Instagram de rescate: SOLO se muestra si el envío del formulario falla.
+  // No es un botón visible: nadie te va a escribir por aquí "porque sí".
+  // Sin la arroba. Vacío = no se muestra ningún enlace de respaldo.
+  instagramContacto: "camilo_hellfit"
 };
