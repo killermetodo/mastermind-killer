@@ -23,7 +23,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<!-- Solo los pesos que el CSS usa de verdad. El 500 no se usaba en ninguna
+     regla y obligaba a descargar dos archivos de fuente de más. -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400&family=Inter:wght@400&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="assets/css/styles.css">
 
@@ -119,11 +121,16 @@
 
       <div class="premisa__fotos">
         <figure class="foto reveal">
-          <!-- Una sola foto, a propósito. Sin loading="lazy": son ~140 KB y en
-               algunos navegadores el lazy no dispara y queda en blanco. -->
-          <img src="assets/img/camilo-retrato.jpg" alt="Camilo, fundador de Método Killer"
-               width="1000" height="1250" decoding="async">
-          <figcaption>Buenos Aires. Aprendiendo de los que ya lo hicieron.</figcaption>
+          <!-- Una sola foto, a propósito. Sin loading="lazy": en algunos
+               navegadores no dispara y el hueco queda en blanco. -->
+          <!-- Dos tamaños: el teléfono se lleva 64 KB en vez de 140. -->
+          <img src="assets/img/camilo-retrato-700.jpg"
+               srcset="assets/img/camilo-retrato-700.jpg 700w,
+                       assets/img/camilo-retrato-1200.jpg 1200w"
+               sizes="(min-width:900px) 38vw, 88vw"
+               alt="Camilo, fundador de Método Killer"
+               width="1200" height="1500" decoding="async">
+          <figcaption>Buenos Aires.</figcaption>
         </figure>
       </div>
     </div>
