@@ -1,0 +1,5 @@
+# Un nombre por linea. Las lineas que empiezan con # se ignoran.
+# Estos son de ejemplo: reemplazalos por los seleccionados de verdad.
+Alvaro Fuentes
+Maria Jose Contreras
+Sebastian Munoz
