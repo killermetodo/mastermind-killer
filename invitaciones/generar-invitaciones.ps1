@@ -10,33 +10,40 @@
 #    3. Las imagenes quedan en la carpeta  salida\
 #
 #  Solo hay que tocar nombres.txt. Nada mas.
+#
+#  Sale en PNG: la imagen es texto blanco sobre negro plano, y el JPG
+#  ensucia los bordes de las letras. El PNG las deja limpias.
 # =============================================================
 param(
   [string]$Lista  = "$PSScriptRoot\nombres.txt",
-  [string]$Salida = "$PSScriptRoot\salida",
-  [string]$Foto   = "$PSScriptRoot\..\assets\img\camilo-retrato-1200.jpg"
+  [string]$Salida = "$PSScriptRoot\salida"
 )
 
 Add-Type -AssemblyName System.Drawing
 
 # --- Datos del evento -------------------------------------------------
-$FECHA  = "S" + [char]0x00C1 + "BADO 29 DE AGOSTO"
-$HORA   = "9:00 HRS"
-$LUGAR  = "ARICA"
+$FECHA = "S" + [char]0x00C1 + "BADO 29 DE AGOSTO"
+$HORA  = "9:00 HRS"
+$LUGAR = "ARICA"
 
-# --- Marca ------------------------------------------------------------
-$W = 1080; $H = 1350          # 4:5, el formato que mejor entra en WhatsApp
+# --- Lienzo -----------------------------------------------------------
+# Se disena sobre una reticula de 1080x1350 y se renderiza al doble, para
+# que el texto quede nitido en pantallas de telefono de alta densidad.
+$BASE_W = 1080; $BASE_H = 1350
+$S = 2.0
+$W = [int]($BASE_W * $S); $H = [int]($BASE_H * $S)
+
 $negro   = [System.Drawing.Color]::FromArgb(10,10,10)
 $blanco  = [System.Drawing.Color]::FromArgb(245,245,245)
 $titanio = [System.Drawing.Color]::FromArgb(176,176,176)
-$tenue   = [System.Drawing.Color]::FromArgb(120,120,120)
+$tenue   = [System.Drawing.Color]::FromArgb(125,125,125)
 
 # Acentos por codigo, para no depender de la codificacion del archivo.
 # OJO: PowerShell no distingue mayusculas en los nombres de variable, asi que
 # $O_ACC y $o_acc serian la MISMA. Por eso las minusculas llevan sufijo Min.
-$A_ACC = [char]0x00C1; $O_ACC = [char]0x00D3; $U_ACC = [char]0x00DA
-$aMin  = [char]0x00E1; $eMin  = [char]0x00E9; $iMin  = [char]0x00ED
-$oMin  = [char]0x00F3; $uMin  = [char]0x00FA; $PUNTO = [char]0x00B7
+$O_ACC = [char]0x00D3
+$aMin = [char]0x00E1; $iMin = [char]0x00ED; $uMin = [char]0x00FA
+$PUNTO = [char]0x00B7
 
 if (-not (Test-Path $Salida)) { New-Item -ItemType Directory -Path $Salida | Out-Null }
 if (-not (Test-Path $Lista))  { Write-Error "No encuentro $Lista"; exit 1 }
@@ -47,23 +54,11 @@ $nombres = Get-Content $Lista -Encoding UTF8 |
 
 if ($nombres.Count -eq 0) { Write-Error "nombres.txt esta vacio"; exit 1 }
 
-# Escribe texto separando las letras (el tracking ancho de la marca)
-function Escribir($g, $texto, $fuente, $color, $x, $y, $tracking) {
-  $b = New-Object System.Drawing.SolidBrush($color)
-  $fmt = [System.Drawing.StringFormat]::GenericTypographic
-  $cursor = [float]$x
-  foreach ($ch in $texto.ToCharArray()) {
-    $s = [string]$ch
-    $g.DrawString($s, $fuente, $b, $cursor, [float]$y, $fmt)
-    $ancho = $g.MeasureString($s, $fuente, 0, $fmt).Width
-    if ($s -eq ' ') { $ancho = $fuente.Size * 0.30 }
-    $cursor += $ancho + $tracking
-  }
-  $b.Dispose()
-  return $cursor - $x   # ancho total dibujado
+function Fuente($tam, $estilo) {
+  New-Object System.Drawing.Font("Arial", ($tam * $S), $estilo, [System.Drawing.GraphicsUnit]::Pixel)
 }
 
-# Mide sin dibujar, para poder centrar
+# Mide el ancho de un texto con tracking, sin dibujarlo
 function Medir($g, $texto, $fuente, $tracking) {
   $fmt = [System.Drawing.StringFormat]::GenericTypographic
   $total = 0.0
@@ -76,100 +71,104 @@ function Medir($g, $texto, $fuente, $tracking) {
   return $total - $tracking
 }
 
-function EscribirCentrado($g, $texto, $fuente, $color, $y, $tracking) {
-  $ancho = Medir $g $texto $fuente $tracking
-  Escribir $g $texto $fuente $color (($W - $ancho) / 2) $y $tracking | Out-Null
+# Dibuja letra a letra para conseguir el tracking ancho de la marca
+function Escribir($g, $texto, $fuente, $color, $x, $y, $tracking) {
+  $b = New-Object System.Drawing.SolidBrush($color)
+  $fmt = [System.Drawing.StringFormat]::GenericTypographic
+  $cursor = [float]$x
+  foreach ($ch in $texto.ToCharArray()) {
+    $s = [string]$ch
+    $g.DrawString($s, $fuente, $b, $cursor, [float]$y, $fmt)
+    $a = $g.MeasureString($s, $fuente, 0, $fmt).Width
+    if ($s -eq ' ') { $a = $fuente.Size * 0.30 }
+    $cursor += $a + $tracking
+  }
+  $b.Dispose()
 }
 
-# Quita tildes y caracteres raros para el nombre del archivo
+# y y tracking se dan en la reticula base; aqui se escalan
+function Centrado($g, $texto, $fuente, $color, $yBase, $trackBase) {
+  $tr = $trackBase * $S
+  $ancho = Medir $g $texto $fuente $tr
+  Escribir $g $texto $fuente $color (($W - $ancho) / 2) ($yBase * $S) $tr
+}
+
+# Quita tildes y espacios para el nombre del archivo
 function NombreArchivo($texto) {
-  $limpio = $texto.Normalize([Text.NormalizationForm]::FormD)
+  $d = $texto.Normalize([Text.NormalizationForm]::FormD)
   $sb = New-Object Text.StringBuilder
-  foreach ($c in $limpio.ToCharArray()) {
+  foreach ($c in $d.ToCharArray()) {
     if ([Globalization.CharUnicodeInfo]::GetUnicodeCategory($c) -ne
         [Globalization.UnicodeCategory]::NonSpacingMark) { [void]$sb.Append($c) }
   }
-  $r = $sb.ToString() -replace '[^A-Za-z0-9]+', '-'
-  return $r.Trim('-').ToLower()
+  return ($sb.ToString() -replace '[^A-Za-z0-9]+', '-').Trim('-').ToLower()
 }
-
-$codec = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() |
-         Where-Object { $_.MimeType -eq 'image/jpeg' }
-$params = New-Object System.Drawing.Imaging.EncoderParameters(1)
-$params.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter(
-  [System.Drawing.Imaging.Encoder]::Quality, [long]88)
-
-$fondo = $null
-if (Test-Path $Foto) { $fondo = [System.Drawing.Image]::FromFile($Foto) }
 
 foreach ($nombre in $nombres) {
 
   $bmp = New-Object System.Drawing.Bitmap($W, $H)
   $g = [System.Drawing.Graphics]::FromImage($bmp)
-  $g.InterpolationMode  = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
   $g.SmoothingMode      = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
   $g.TextRenderingHint  = [System.Drawing.Text.TextRenderingHint]::AntiAliasGridFit
+  $g.PixelOffsetMode    = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
   $g.Clear($negro)
 
   # --- Marco fino, como una tarjeta -----------------------------------
   # Sin foto a proposito: el protagonista de la invitacion es quien la recibe.
-  $penMarco = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(45,245,245,245), 2)
-  $g.DrawRectangle($penMarco, 46, 46, ($W - 92), ($H - 92))
+  $penMarco = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(45,245,245,245), (2 * $S))
+  $g.DrawRectangle($penMarco, (46 * $S), (46 * $S), (($BASE_W - 92) * $S), (($BASE_H - 92) * $S))
 
-  # --- Tipografia -----------------------------------------------------
-  $fEyebrow = New-Object System.Drawing.Font("Arial", 21, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
-  $fMarca   = New-Object System.Drawing.Font("Arial", 62, [System.Drawing.FontStyle]::Bold,    [System.Drawing.GraphicsUnit]::Pixel)
-  $fEdicion = New-Object System.Drawing.Font("Arial", 24, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
-  $fTitular = New-Object System.Drawing.Font("Arial", 40, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
-  $fCuerpo  = New-Object System.Drawing.Font("Arial", 25, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
-  $fDato    = New-Object System.Drawing.Font("Arial", 23, [System.Drawing.FontStyle]::Bold,    [System.Drawing.GraphicsUnit]::Pixel)
+  $fEyebrow = Fuente 21 ([System.Drawing.FontStyle]::Regular)
+  $fMarca   = Fuente 62 ([System.Drawing.FontStyle]::Bold)
+  $fEdicion = Fuente 24 ([System.Drawing.FontStyle]::Regular)
+  $fTitular = Fuente 40 ([System.Drawing.FontStyle]::Regular)
+  $fCuerpo  = Fuente 25 ([System.Drawing.FontStyle]::Regular)
+  $fDato    = Fuente 23 ([System.Drawing.FontStyle]::Bold)
+  $fSello   = Fuente 19 ([System.Drawing.FontStyle]::Bold)
 
   # El nombre manda: se encoge solo si es largo, para que nunca se corte
-  $tamNombre = 78
+  $tam = 78
   do {
-    $fNombre = New-Object System.Drawing.Font("Arial", $tamNombre, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-    $anchoNombre = Medir $g $nombre.ToUpper() $fNombre 6
-    if ($anchoNombre -gt ($W - 140)) { $fNombre.Dispose(); $tamNombre -= 4 }
-  } while ($anchoNombre -gt ($W - 140) -and $tamNombre -gt 30)
+    $fNombre = Fuente $tam ([System.Drawing.FontStyle]::Bold)
+    $anchoNombre = Medir $g $nombre.ToUpper() $fNombre (6 * $S)
+    if ($anchoNombre -gt (($BASE_W - 150) * $S)) { $fNombre.Dispose(); $tam -= 3 }
+  } while ($anchoNombre -gt (($BASE_W - 150) * $S) -and $tam -gt 26)
 
-  EscribirCentrado $g "INVITACI${O_ACC}N PERSONAL" $fEyebrow $tenue 130 10
+  Centrado $g "INVITACI${O_ACC}N PERSONAL" $fEyebrow $tenue 130 10
+  Centrado $g "MASTERMIND KILLER"          $fMarca   $blanco 225 6
+  Centrado $g "PRIMERA EDICI${O_ACC}N"     $fEdicion $titanio 320 11
 
-  EscribirCentrado $g "MASTERMIND KILLER" $fMarca   $blanco  225 6
-  EscribirCentrado $g "PRIMERA EDICI${O_ACC}N" $fEdicion $titanio 320 11
+  $pen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(70,245,245,245), (1 * $S))
+  $g.DrawLine($pen, (380 * $S), (400 * $S), (($BASE_W - 380) * $S), (400 * $S))
 
-  $pen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(70,245,245,245), 1)
-  $g.DrawLine($pen, 380, 400, ($W - 380), 400)
+  Centrado $g "QUEDASTE DENTRO" $fTitular $blanco 470 12
+  Centrado $g $nombre.ToUpper() $fNombre  $blanco 580 6
 
-  EscribirCentrado $g "QUEDASTE DENTRO" $fTitular $blanco 470 12
+  Centrado $g "Postularon muchos. Hay diez puestos."  $fCuerpo $titanio 730 1
+  Centrado $g "Uno de esos puestos es tuyo."          $fCuerpo $titanio 774 1
 
-  EscribirCentrado $g $nombre.ToUpper() $fNombre $blanco 580 6
+  Centrado $g "Un d${iMin}a para armar el negocio que" $fCuerpo $titanio 856 1
+  Centrado $g "tu conocimiento ya se merece."          $fCuerpo $titanio 900 1
 
-  EscribirCentrado $g "Postularon muchos. Entran diez."          $fCuerpo $titanio 730 1
-  EscribirCentrado $g "T${uMin} est${aMin}s dentro."             $fCuerpo $titanio 774 1
-
-  EscribirCentrado $g "Un d${iMin}a para armar el negocio que"   $fCuerpo $titanio 856 1
-  EscribirCentrado $g "tu conocimiento ya se merece."            $fCuerpo $titanio 900 1
-
-  # Sello: refuerza la exclusividad sin decirlo
-  $fSello = New-Object System.Drawing.Font("Arial", 20, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-  $anchoSello = Medir $g "1 DE 10" $fSello 8
+  # Sello: dice que tiene UN puesto de los diez, no que sea "el numero 1"
+  $sello = "UNO DE LOS 10 PUESTOS"
+  $anchoSello = Medir $g $sello $fSello (8 * $S)
   $x0 = ($W - $anchoSello) / 2
-  $penSello = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(90,245,245,245), 1)
-  $g.DrawRectangle($penSello, ($x0 - 34), 990, ($anchoSello + 68), 58)
-  EscribirCentrado $g "1 DE 10" $fSello $blanco 1008 8
+  $penSello = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(90,245,245,245), (1 * $S))
+  $g.DrawRectangle($penSello, ($x0 - (34 * $S)), (990 * $S), ($anchoSello + (68 * $S)), (58 * $S))
+  Centrado $g $sello $fSello $blanco 1008 8
 
-  $g.DrawLine($pen, 380, 1120, ($W - 380), 1120)
+  $g.DrawLine($pen, (380 * $S), (1120 * $S), (($BASE_W - 380) * $S), (1120 * $S))
 
-  EscribirCentrado $g "$LUGAR  ${PUNTO}  $FECHA" $fDato $blanco 1178 6
-  EscribirCentrado $g "$HORA  ${PUNTO}  5 HORAS  ${PUNTO}  MESA REDONDA" $fDato $titanio 1222 6
+  Centrado $g "$LUGAR  ${PUNTO}  $FECHA" $fDato $blanco 1178 6
+  Centrado $g "$HORA  ${PUNTO}  5 HORAS  ${PUNTO}  MESA REDONDA" $fDato $titanio 1222 6
 
-  $archivo = Join-Path $Salida ("invitacion-" + (NombreArchivo $nombre) + ".jpg")
-  $bmp.Save($archivo, $codec, $params)
+  $archivo = Join-Path $Salida ("invitacion-" + (NombreArchivo $nombre) + ".png")
+  $bmp.Save($archivo, [System.Drawing.Imaging.ImageFormat]::Png)
 
   $g.Dispose(); $bmp.Dispose()
-  "  {0,-28} -> {1} KB" -f $nombre, [Math]::Round((Get-Item $archivo).Length / 1KB, 0)
+  "  {0,-30} {1} KB" -f $nombre, [Math]::Round((Get-Item $archivo).Length / 1KB, 0)
 }
 
-if ($fondo) { $fondo.Dispose() }
 ""
-"$($nombres.Count) invitaciones en: $Salida"
+"$($nombres.Count) invitaciones de ${W}x${H}px en: $Salida"

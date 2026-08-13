@@ -1,5 +1,14 @@
 # Un nombre por linea. Las lineas que empiezan con # se ignoran.
-# Estos son de ejemplo: reemplazalos por los seleccionados de verdad.
-Alvaro Fuentes
-Maria Jose Contreras
-Sebastian Munoz
+# Tal como quieras que aparezca en la invitacion: si falta una tilde
+# o esta mal escrito un apellido, corrigelo aqui y vuelve a ejecutar.
+Hermógenes Navarro
+Yohana Soto
+Pedro Pereira
+Brayan Dubó
+Estefano Soria
+José González
+Camila Pavez
+Yassmin Arias
+Sebastián Villanueva
+Braulio Mamani
+Adolfo Cebrero
